@@ -31,6 +31,25 @@ class Chef
         :description => "The datacenter where the server will be created",
         :proc => Proc.new { |datacenter| Chef::Config[:knife][:profitbricks_datacenter] = datacenter }
 
+      option :profitbricks_user,
+        :short => "-A PROFITBRICKS_USERNAME",
+        :long => "--username PROFITBRICKS_USERNAME",
+        :description => "The username for profitbricks cloud",
+        :proc => Proc.new { |username| Chef::Config[:knife][:profitbricks_user] = username }
+
+      option :profitbricks_password,
+        :short => "-K PROFITBRICKS_PASSWORD",
+        :long => "--password PROFITBRICKS_PASSWORD",
+        :description => "The password for profitbricks cloud",
+        :proc => Proc.new { |password| Chef::Config[:knife][:profitbricks_password] = password }
+        
+        
+        option :image_password,
+        :long => "--image-password IMAGE_PASSWORD",
+        :description => "The password for Your private image or snapshot",
+        :proc => Proc.new { |password| Chef::Config[:knife][:image_password] = password }
+        
+                
       option :name,
         :long => "--name SERVER_NAME",
         :description => "name for the newly created Server",
@@ -117,6 +136,8 @@ class Chef
         @highline ||= HighLine.new
       end
 
+
+      
       def run
         validate!
         configure
@@ -168,9 +189,9 @@ class Chef
       end
 
       def create_server
-        @password = SecureRandom.hex.gsub(/[i|l|0|1|I|L]/,'')
+        @password =  locate_config_value(:image_password) || SecureRandom.hex.gsub(/[i|l|0|1|I|L]/,'')
         @new_password = SecureRandom.hex.gsub(/[i|l|0|1|I|L]/,'')
-
+	
         storage_options = {:size => locate_config_value(:hdd_size),
                            :data_center_id => "#{@dc.id}"}
         if locate_config_value(:profitbricks_snapshot_name)
@@ -182,8 +203,6 @@ class Chef
           storage_options = storage_options.merge(:mount_image_id => "#{@image.id}", :profit_bricks_image_password => @password)
           #storage_options.merge(:mount_image_id => @image.id)
         end
-	puts "STORAGE OPTIONS ==========================> "
-	puts storage_options.inspect
         @hdd1 = Storage.create(storage_options)
         wait_for("#{ui.color("Creating Storage", :magenta)}") { @dc.provisioned? }
         if locate_config_value(:profitbricks_snapshot_name)
@@ -191,16 +210,11 @@ class Chef
           wait_for("#{ui.color("Applying Snapshot", :magenta)}") { @dc.provisioned? }
         end
 
-	puts "STORAGE DETAILS ==========================> "
-	puts @hdd1.inspect
-	
         @server = @dc.create_server(:cores => Chef::Config[:knife][:profitbricks_cpus] || 1,
                                   :ram => Chef::Config[:knife][:profitbricks_memory] || 1024,
-                                  :name => Chef::Config[:knife][:profitbricks_server_name] || "Server",
+                                  :name => Chef::Config[:knife][:profitbricks_server_name] || locate_config_value(:chef_node_name),
                                   :boot_from_storage_id => "#{@hdd1.id}",
                                   :internet_access => true)
-	puts "SERVER DETAILS ==========================> "
-	puts @server.inspect
 
         wait_for("#{ui.color("Creating Server", :magenta)}") { @dc.provisioned? }
 
@@ -284,7 +298,7 @@ class Chef
         bootstrap.config[:template_file] = locate_config_value(:template_file)
         bootstrap.run
         # This is a temporary fix until ohai 6.18.0 is released
-        ssh("gem install ohai --pre --no-ri --no-rdoc && chef-client").run
+        #ssh("gem install ohai --pre --no-ri --no-rdoc && chef-client").run
       end
     end
   end
