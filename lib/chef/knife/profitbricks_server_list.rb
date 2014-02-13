@@ -24,7 +24,7 @@ class Chef
 
       def run
         configure
-        datacenters = Profitbricks::DataCenter.all
+        validate!
 
         server_list = [
             ui.color('ID', :bold),
@@ -35,8 +35,17 @@ class Chef
             ui.color('IPs', :bold)
 
         ]
-
+        puts "#{ui.color("Locating Datacenter", :magenta)}"
+        if locate_config_value(:profitbricks_datacenter)
+        	datacenters = []
+        	datacenters << Profitbricks::DataCenter.find(:name => Chef::Config[:knife][:profitbricks_datacenter])
+        else
+        	datacenters = Profitbricks::DataCenter.all
+        end
+        
         datacenters.each do |dc|
+        puts ui.color("Servers in Datacenter #{dc.name} : ", :blue)
+        if dc.servers
           dc.servers.each do |s|
             server_list << s.id
             server_list << s.name
@@ -45,9 +54,11 @@ class Chef
             server_list << s.ram.to_s
             server_list << (s.respond_to?("ips") ? s.ips : "")
           end
+           puts ui.list(server_list, :uneven_columns_across, 6)
+        else
+          puts "#{ui.color("Sorry! No Servers Found.", :magenta)}"
         end
-
-        puts ui.list(server_list, :uneven_columns_across, 6)
+        end
       end
     end
   end
