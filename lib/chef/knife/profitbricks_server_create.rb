@@ -126,6 +126,13 @@ class Chef
         :proc => Proc.new { |t| Chef::Config[:knife][:template_file] = t },
         :default => false
 
+      option :json_attributes,
+        :short => "-j JSON",
+        :long => "--json-attributes JSON",
+        :description => "A JSON string to be added to the first run of chef-client",
+        :proc => lambda { |o| JSON.parse(o) }
+
+
       option :chef_node_name,
         :short => "-N NAME",
         :long => "--node-name NAME",
@@ -295,6 +302,7 @@ class Chef
         bootstrap.config[:chef_node_name] = locate_config_value(:chef_node_name) || @server.name
         bootstrap.config[:distro] = locate_config_value(:distro)
         bootstrap.config[:use_sudo] = true unless bootstrap.config[:ssh_user] == 'root'
+        bootstrap.config[:first_boot_attributes] = locate_config_value(:json_attributes) || {}
         bootstrap.config[:template_file] = locate_config_value(:template_file)
         bootstrap.run
         # This is a temporary fix until ohai 6.18.0 is released
