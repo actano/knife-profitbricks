@@ -85,8 +85,7 @@ class Chef
       option :identity_file,
         :short => "-i IDENTITY_FILE",
         :long => "--identity-file IDENTITY_FILE",
-        :description => "The SSH identity file used for authentication",
-        :default => "#{File.expand_path('~')}/.ssh/id_rsa"
+        :description => "The SSH identity file used for authentication"
 
       option :image_name,
         :short => "-i IMAGE_NAME",
@@ -103,8 +102,7 @@ class Chef
       option :public_key_file,
         :short => "-k PUBLIC_KEY_FILE",
         :long => "--public-key-file PUBLIC_KEY_FILE",
-        :description => "The SSH public key file to be added to the authorized_keys of the given user, default is '~/.ssh/id_rsa.pub'",
-        :default => "#{File.expand_path('~')}/.ssh/id_rsa.pub"
+        :description => "The SSH public key file to be added to the authorized_keys of the given user"
 
       option :run_list,
         :short => "-r RUN_LIST",
