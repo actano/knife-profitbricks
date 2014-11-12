@@ -297,6 +297,7 @@ module ProfitbricksKnifePlugin
       end
 
       def bootstrap
+        Chef::Knife::Bootstrap.load_deps
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = @server.public_ips
         bootstrap.config[:run_list] = locate_config_value(:run_list)
