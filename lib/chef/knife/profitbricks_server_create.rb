@@ -49,7 +49,12 @@ class Chef
         :description => "The password for Your private image or snapshot",
         :proc => Proc.new { |password| Chef::Config[:knife][:image_password] = password }
         
-                
+        option :change_login,
+        :long => "--[no-]change-login",
+        :description => "Change initial password and upload ssh public key",
+        :boolean => true,
+        :default => true
+
       option :name,
         :long => "--name SERVER_NAME",
         :description => "name for the newly created Server",
@@ -175,11 +180,13 @@ class Chef
 
         create_server()
 
-        change_password()
-        @password = @new_password
-        puts ui.color("Changed the password successfully", :green)
+        if config[:change_login]
+          change_password()
+          @password = @new_password
+          puts ui.color("Changed the password successfully", :green)
 
-        upload_ssh_key
+          upload_ssh_key
+        end
 
         if config[:bootstrap]
           bootstrap()
