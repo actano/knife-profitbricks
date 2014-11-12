@@ -298,7 +298,7 @@ module ProfitbricksKnifePlugin
 
       def bootstrap
         bootstrap = Chef::Knife::Bootstrap.new
-        bootstrap.name_args = @server.ips
+        bootstrap.name_args = @server.public_ips
         bootstrap.config[:run_list] = locate_config_value(:run_list)
         bootstrap.config[:ssh_user] = locate_config_value(:ssh_user)
         bootstrap.config[:ssh_password] = @password
