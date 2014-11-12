@@ -54,6 +54,12 @@ module ProfitbricksKnifePlugin
         :boolean => true,
         :default => true
 
+      option :try_existing,
+        :long => "--[no-]try-existing",
+        :description => "Try to use existing server with same name first",
+        :boolean => true,
+        :default => false
+
       option :name,
         :long => "--name SERVER_NAME",
         :description => "name for the newly created Server",
@@ -177,7 +183,13 @@ module ProfitbricksKnifePlugin
         #@dc.wait_for_provisioning
         # DELETEME
 
+        if config[:try_existing]
+          @server = find_server Chef::Config[:knife][:profitbricks_server_name] || locate_config_value(:chef_node_name)
+        end
+
+        if @server.nil?
         create_server()
+        end
 
         if config[:change_login]
           change_password()
@@ -197,6 +209,17 @@ module ProfitbricksKnifePlugin
         msg_pair("CPUs", @server.cores.to_s)
         msg_pair("RAM", @server.ram.to_s)
         msg_pair("IPs", (@server.respond_to?("ips") ? @server.ips : ""))
+      end
+
+      def find_server(name)
+        if @dc.servers
+          @dc.servers.each do |s|
+            if s.name == name
+              puts "#{ui.color("Using existing Server", :magenta)}"
+              return s
+            end
+          end
+        end
       end
 
       def create_server
