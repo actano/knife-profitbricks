@@ -4,7 +4,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "knife-profitbricks"
-  s.version     = "0.3.1"
+  s.version     = "0.3.2"
   s.authors     = ["Kishorekumar Neelamegam, Thomas Alrin"]
   s.email       = ["nkishore@megam.co.in","alrin@megam.co.in"]
   s.homepage    = "http://github.com/indykish/knife-profitbricks"
