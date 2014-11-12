@@ -2,9 +2,8 @@ require 'chef/knife'
 require 'chef/json_compat'
 
 require_relative 'profitbricks_base'
-class Chef
-  class Knife
-    class ProfitbricksServerList < Knife
+module ProfitbricksKnifePlugin
+    class ProfitbricksServerList < Chef::Knife
       require_relative 'profitbricks_base'
       deps do
         require 'profitbricks'
@@ -12,7 +11,7 @@ class Chef
         Chef::Knife.load_deps
       end
 
-      include Chef::Knife::ProfitbricksBase
+      include ProfitbricksBase
 
       banner "knife profitbricks server list OPTIONS"
 
@@ -61,5 +60,4 @@ class Chef
         end
       end
     end
-  end
 end

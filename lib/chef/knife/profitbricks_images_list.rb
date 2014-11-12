@@ -2,9 +2,8 @@ require 'chef/knife'
 require 'chef/json_compat'
 
 require_relative 'profitbricks_base'
-class Chef
-  class Knife
-    class ProfitbricksImageList < Knife
+module ProfitbricksKnifePlugin
+    class ProfitbricksImageList < Chef::Knife
       require_relative 'profitbricks_base'
       deps do
         require 'profitbricks'
@@ -12,7 +11,7 @@ class Chef
         Chef::Knife.load_deps
       end
 
-      include Chef::Knife::ProfitbricksBase
+      include ProfitbricksBase
 
       banner "knife profitbricks image list OPTIONS"
 
@@ -42,5 +41,4 @@ class Chef
         puts ui.list(image_list, :uneven_columns_across, 6)
       end
     end
-  end
 end

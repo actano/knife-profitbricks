@@ -2,9 +2,9 @@ require 'chef/knife'
 require 'chef/json_compat'
 
 require_relative 'profitbricks_base'
-class Chef
-  class Knife
-    class ProfitbricksSnapshotList < Knife
+
+module ProfitbricksKnifePlugin
+    class ProfitbricksSnapshotList < Chef::Knife
       require_relative 'profitbricks_base'
       deps do
         require 'profitbricks'
@@ -12,7 +12,7 @@ class Chef
         Chef::Knife.load_deps
       end
 
-      include Chef::Knife::ProfitbricksBase
+      include ProfitbricksBase
 
       banner "knife profitbricks snapshot list OPTIONS"
 
@@ -41,5 +41,4 @@ class Chef
         puts ui.list(snapshot_list, :uneven_columns_across, 6)
       end
     end
-  end
 end

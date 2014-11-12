@@ -6,9 +6,8 @@ require 'chef/node'
 require 'chef/api_client'
 
 require_relative 'profitbricks_base'
-class Chef
-  class Knife
-    class ProfitbricksServerDelete < Knife
+module ProfitbricksKnifePlugin
+    class ProfitbricksServerDelete < Chef::Knife
       require_relative 'profitbricks_base'
       deps do
         require 'profitbricks'
@@ -16,7 +15,7 @@ class Chef
         Chef::Knife.load_deps
       end
 
-      include Chef::Knife::ProfitbricksBase
+      include ProfitbricksBase
 
       banner "knife profitbricks server delete SERVERNAME OPTIONS"
 
@@ -139,5 +138,4 @@ class Chef
       end
       
     end
-  end
 end

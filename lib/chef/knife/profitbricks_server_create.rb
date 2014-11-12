@@ -2,9 +2,8 @@ require 'chef/knife'
 require 'chef/json_compat'
 require_relative 'profitbricks_base'
 
-class Chef
-  class Knife
-    class ProfitbricksServerCreate < Knife
+module ProfitbricksKnifePlugin
+    class ProfitbricksServerCreate < Chef::Knife
 
       deps do
         require 'net/ssh'
@@ -20,7 +19,7 @@ class Chef
         Chef::Knife.load_deps
 
       end
-      include Knife::ProfitbricksBase
+      include ProfitbricksBase
 
 
       banner "knife profitbricks server create OPTIONS"
@@ -314,5 +313,4 @@ class Chef
         #ssh("gem install ohai --pre --no-ri --no-rdoc && chef-client").run
       end
     end
-  end
 end

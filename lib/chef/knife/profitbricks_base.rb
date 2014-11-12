@@ -1,7 +1,6 @@
 require 'chef/knife'
 
-class Chef
-  class Knife
+module ProfitbricksKnifePlugin
     module ProfitbricksBase
       def configure
         Profitbricks.configure do |config|
@@ -63,5 +62,4 @@ class Chef
       end
 
     end
-  end
 end
