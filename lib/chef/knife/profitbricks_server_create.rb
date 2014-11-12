@@ -302,7 +302,9 @@ module ProfitbricksKnifePlugin
         bootstrap.name_args = @server.public_ips
         bootstrap.config[:run_list] = locate_config_value(:run_list)
         bootstrap.config[:ssh_user] = locate_config_value(:ssh_user)
-        bootstrap.config[:ssh_password] = @password
+        if config[:change_login]
+          bootstrap.config[:ssh_password] = @password
+        end
         bootstrap.config[:host_key_verify] = false
         bootstrap.config[:chef_node_name] = locate_config_value(:chef_node_name) || @server.name
         bootstrap.config[:distro] = locate_config_value(:distro)
