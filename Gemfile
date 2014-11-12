@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'profitbricks', :git => "git://github.com/indykish/profitbricks-rb.git"
+gem 'profitbricks', :git => "git://github.com/actano/profitbricks-rb.git"
 gem 'chef', '> 11.0.0'
 
 group :test, :development do
