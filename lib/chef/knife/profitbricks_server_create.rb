@@ -329,6 +329,7 @@ module ProfitbricksKnifePlugin
           bootstrap.config[:ssh_password] = @password
         end
         bootstrap.config[:host_key_verify] = false
+        bootstrap.config[:identity_file] = locate_config_value(:identity_file) || ''
         bootstrap.config[:chef_node_name] = locate_config_value(:chef_node_name) || @server.name
         bootstrap.config[:distro] = locate_config_value(:distro)
         bootstrap.config[:use_sudo] = true unless bootstrap.config[:ssh_user] == 'root'
