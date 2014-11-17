@@ -58,6 +58,10 @@ These knife-profitbricks options are optional:
 
     -x, --ssh-user USERNAME          The ssh username
 
+    --[no-]try-existing              Try/Do not try to use an existing server with the name first
+
+    --[no-]change-login              Change/Do not change initial password and upload ssh public key
+
 The following are optional options provided by knife:
 
         --[no-]bootstrap             Bootstrap the server with knife bootstrap

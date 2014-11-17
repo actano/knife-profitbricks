@@ -41,14 +41,14 @@ module ProfitbricksKnifePlugin
         :long => "--password PROFITBRICKS_PASSWORD",
         :description => "The password for profitbricks cloud",
         :proc => Proc.new { |password| Chef::Config[:knife][:profitbricks_password] = password }
-        
-        
-        option :image_password,
+
+
+      option :image_password,
         :long => "--image-password IMAGE_PASSWORD",
         :description => "The password for Your private image or snapshot",
         :proc => Proc.new { |password| Chef::Config[:knife][:image_password] = password }
-        
-        option :change_login,
+
+      option :change_login,
         :long => "--[no-]change-login",
         :description => "Change initial password and upload ssh public key",
         :boolean => true,
@@ -105,7 +105,7 @@ module ProfitbricksKnifePlugin
 
       option :snapshot_name,
         :short => '-S SNAPSHOT_NAME',
-        :long => "--snaphot-name SNAPSHOT_NAME",
+        :long => "--snapshot-name SNAPSHOT_NAME",
         :description => "The snapshot name which will be used to create the server (can not be used with the image-name option)",
         :proc => Proc.new { |s| Chef::Config[:knife][:profitbricks_snapshot_name] = s }
 
@@ -152,7 +152,7 @@ module ProfitbricksKnifePlugin
       end
 
 
-      
+
       def run
         validate!
         configure
@@ -225,7 +225,7 @@ module ProfitbricksKnifePlugin
       def create_server
         @password =  locate_config_value(:image_password) || SecureRandom.hex.gsub(/[i|l|0|1|I|L]/,'')
         @new_password = SecureRandom.hex.gsub(/[i|l|0|1|I|L]/,'')
-	
+
         storage_options = {:size => locate_config_value(:hdd_size),
                            :data_center_id => "#{@dc.id}"}
         if locate_config_value(:profitbricks_snapshot_name)
