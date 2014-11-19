@@ -328,6 +328,9 @@ module ProfitbricksKnifePlugin
         if config[:change_login]
           bootstrap.config[:ssh_password] = @password
         end
+        if config[:identity_file]
+          bootstrap.config[:identity_file] = config[:identity_file]
+        end
         bootstrap.config[:host_key_verify] = false
         bootstrap.config[:chef_node_name] = locate_config_value(:chef_node_name) || @server.name
         bootstrap.config[:distro] = locate_config_value(:distro)
